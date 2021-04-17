@@ -38,7 +38,7 @@ function Tickets() {
   }
   console.log(orders)
 
-  const submited = (event) => {
+  const submitted = (event) => {
     event.preventDefault();
     console.log(uri);
     axios({
@@ -57,9 +57,9 @@ function Tickets() {
  
   
   const addUsed = () => {
-    console.log('addUsed')
+    console.log('https://ticketguru.codecache.eu/api/soldtickets/'+ticket.ticketID)
     axios({
-      baseURL: uri,
+      baseURL: 'https://ticketguru.codecache.eu/api/soldtickets/'+ticket.ticketID,
       method: 'PATCH',
       auth: {
         username: username,
@@ -69,22 +69,42 @@ function Tickets() {
         "code": code
       }
     })
+    reFresh()
   }
+    const reFresh = () => {
+      
+      console.log(uri);
+      axios({
+        baseURL: uri,
+        auth: {
+            username: username,
+            password: password
+          },
+      })
+      .then(response => {const data = response.data;
+       setTicket(data)
+      })
+      .catch(err => console.error(err))
+      console.log('2 ' + ticket)
+    }
+    
+  
 
     return (
         <div>
           <h3>Lippuntarkastustestaaja</h3>
-          <form onSubmit={submited}>
+          <form onSubmit={submitted}>
             <label htmlFor="code">Koodi: </label>
             <input type="text" name="code" 
             onChange={inputChanged}/>
             <input type="submit" value="Send" />
           </form>
           <div style={{textAlign: 'center'}}>
+            <p>Id: {ticket.ticketID}</p>
             <p>Tapahtuma: {ticket.eventName}</p>
             <p>Koodi: {ticket.code}</p>
             <p>Lipputyyppi: {ticket.ticketType}</p>
-            <p>Käytetty: {ticket.used}</p>
+            <p>Käytetty: {ticket.usedDate}</p>
           </div>
           <button onClick={addUsed}>Käytä</button>
         </div>
