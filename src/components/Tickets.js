@@ -3,28 +3,25 @@ import axios from 'axios';
 import { AgGridReact } from 'ag-grid-react';
 
 function Tickets() {
-  const [events, setEvents] = useState([])
+  const [orders, setOrders] = useState([])
   const [username, setUsername] = useState('admin') 
   const [password, setPassword] = useState('password')
   const [code, setCode] = useState()
   const [ticket, setTicket] = useState([])
-  const url = 'https://ticketguru.codecache.eu/api/orders'
   const [uri, setUri] = useState()
-
-  //const basicAuth = 'Basic ' + btoa(username + ':' + password);
 
   const inputChanged = (event) => {
     setUri('https://ticketguru.codecache.eu/api/soldtickets?code=' + event.target.value)
     setCode(event.target.value)
   }
   
-/*   useEffect(() => {
+  useEffect(() => {
     fetchEvents();
-    }, []); */ 
+    }, []);
 
   const fetchEvents = () => {
     axios({
-      baseURL: url,
+      baseURL: 'https://ticketguru.codecache.eu/api/orders',
       auth: {
           username: username,
           password: password
@@ -32,16 +29,14 @@ function Tickets() {
     })
     .then(response => {
       const data = response.data;
-      setEvents(data)
+      setOrders(data)
       console.log(response + 'Authenticated');
     })
     .catch(function(error) {
-      console.log(' Error on Authentication');
+      console.log('Error on Authentication');
     });
   }
-console.log(events)
-/* console.log(code)
-console.log(uri) */
+  console.log(orders)
 
   const submited = (event) => {
     event.preventDefault();
@@ -74,37 +69,23 @@ console.log(uri) */
         "code": code
       }
     })
-    /* .then(response => {const data = response.data;
-     setTicket(data)
-    })
-    .catch(err => console.error(err)); */
-  /*   submitted(); */
   }
-
-  const columns = [
-    { field: 'eventName' },
-    { field: 'code' },
-    { field: 'used' }
-  ]
-
-
 
     return (
         <div>
-          35s33s29
+          <h3>Lippuntarkastustestaaja</h3>
           <form onSubmit={submited}>
             <label htmlFor="code">Koodi: </label>
             <input type="text" name="code" 
             onChange={inputChanged}/>
             <input type="submit" value="Send" />
           </form>
-         <div style={{textAlign: 'center'}}>
-           <p>Tapahtuma: {ticket.eventName}</p>
-           <p>Koodi: {ticket.code}</p>
-           <p>Lipputyyppi: {ticket.ticketType}</p>
-           <p>Käytetty: {ticket.used}</p>
-         </div>
-
+          <div style={{textAlign: 'center'}}>
+            <p>Tapahtuma: {ticket.eventName}</p>
+            <p>Koodi: {ticket.code}</p>
+            <p>Lipputyyppi: {ticket.ticketType}</p>
+            <p>Käytetty: {ticket.used}</p>
+          </div>
           <button onClick={addUsed}>Käytä</button>
         </div>
     );
