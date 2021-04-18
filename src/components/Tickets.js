@@ -78,7 +78,7 @@ function Tickets() {
 
     return (
         <div>
-          <h3>Lippuntarkastustestaaja</h3>
+          <h3>Lipuntarkastus testaaja</h3>
             <label>Koodi: </label>
             <input type="text" name="code" 
             onChange={inputChanged}/>
