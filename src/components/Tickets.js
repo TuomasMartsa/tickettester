@@ -38,8 +38,8 @@ function Tickets() {
   }
   console.log(orders)
 
-  const submitted = (event) => {
-    event.preventDefault();
+  const submitted = () => {
+   // event.preventDefault();
     console.log(uri);
     axios({
       baseURL: uri,
@@ -53,11 +53,8 @@ function Tickets() {
     })
     .catch(err => console.error(err))
   }
-  console.log(ticket)
- 
-  
+
   const addUsed = () => {
-    console.log('https://ticketguru.codecache.eu/api/soldtickets/'+ticket.ticketID)
     axios({
       baseURL: 'https://ticketguru.codecache.eu/api/soldtickets/'+ticket.ticketID,
       method: 'PATCH',
@@ -69,36 +66,24 @@ function Tickets() {
         "code": code
       }
     })
-    reFresh()
+    .then(response =>{
+      if(response.status === 200){
+        alert('Käytetty');
+        submitted();
+      }
+      else  
+        alert('Epäonnistui')
+    })
   }
-    const reFresh = () => {
-      
-      console.log(uri);
-      axios({
-        baseURL: uri,
-        auth: {
-            username: username,
-            password: password
-          },
-      })
-      .then(response => {const data = response.data;
-       setTicket(data)
-      })
-      .catch(err => console.error(err))
-      console.log('2 ' + ticket)
-    }
-    
-  
 
     return (
         <div>
           <h3>Lippuntarkastustestaaja</h3>
-          <form onSubmit={submitted}>
-            <label htmlFor="code">Koodi: </label>
+            <label>Koodi: </label>
             <input type="text" name="code" 
             onChange={inputChanged}/>
-            <input type="submit" value="Send" />
-          </form>
+            <button onClick={submitted}>Hae</button>
+          
           <div style={{textAlign: 'center'}}>
             <p>Id: {ticket.ticketID}</p>
             <p>Tapahtuma: {ticket.eventName}</p>
